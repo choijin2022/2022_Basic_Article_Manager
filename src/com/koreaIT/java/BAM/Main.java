@@ -1,12 +1,17 @@
 package com.koreaIT.java.BAM;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) {
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date now = new Date();
+		
 		
 		System.out.println("== 프로그램 시작 ==");
 		
@@ -56,12 +61,33 @@ public class Main {
 				
 				System.out.printf("내용 : ");
 				String body = sc.nextLine();
+				String nowTime = sdf1.format(now);
+				System.out.println(sdf1.format(now));
 				
-				Article article = new Article(id, title, body);
+				Article article = new Article(id, title, body, nowTime);
 				
 				articles.add(article);
 				
 				System.out.println(id+"번 글이 생성되었습니다");
+			}
+			// 특정 게시물 확인
+			else if(cmd.startsWith("article detail ")) {
+				String[] cmdBits = cmd.split(" ");
+				int id = Integer.parseInt(cmdBits[2]);
+				
+				boolean found = false;
+				for(int i = 0; i <articles.size(); i++) {
+					Article article = articles.get(i);
+					
+					if(article.id == id) {
+						found = true;
+						System.out.printf("%d번 게시물은 존재\n", id);
+					}
+				}
+				
+				if(found == false) {
+				System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+				}
 			}
 			else
 				System.out.println("존재하지 않는 명령어입니다.");
@@ -80,10 +106,13 @@ class Article {
 	int id;
 	String title;
 	String body;
+	String nowTime;
 	
-	Article(int id, String title, String body){
+	Article(int id, String title, String body, String nowTime ){
 		this.id = id;
 		this.title = title;
 		this.body = body;
+		this.nowTime = nowTime;
+		
 	}
 }
