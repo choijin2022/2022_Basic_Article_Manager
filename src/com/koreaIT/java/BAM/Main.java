@@ -15,6 +15,7 @@ public class Main {
 		
 		List<Article> articles = new ArrayList<>();
 		
+		
 		while(true) {
 			System.out.printf("명령어 >> ");
 			String cmd = sc.nextLine().trim();
@@ -32,9 +33,17 @@ public class Main {
 			
 			// 게시글 리스트 확인
 			if(cmd.equals("article list")) {
-				if(lastArticleId==0)
+				if(articles.size()==0) {
 					System.out.println("게시글이 없습니다.");
-				else {
+					continue;
+				}
+				System.out.printf("번호	|	제목");
+				for(int i = articles.size()-1; i >=0 ; i--) {
+					Article article = articles.get(i);
+					
+					System.out.printf("%d, %s\n", article.id, article.title);
+							
+					
 
 				}
 			}
@@ -50,6 +59,7 @@ public class Main {
 				
 				Article article = new Article(id, title, body);
 				
+				articles.add(article);
 				
 				System.out.println(id+"번 글이 생성되었습니다");
 			}
