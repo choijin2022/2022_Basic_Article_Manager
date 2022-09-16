@@ -1,21 +1,17 @@
 package com.koreaIT.java.BAM;
 
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) {
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date now = new Date();
 
 		System.out.println("== 프로그램 시작 ==");
 
 		Scanner sc = new Scanner(System.in);
 		int lastArticleId = 0;
-		
 
 		List<Article> articles = new ArrayList<>();
 
@@ -38,32 +34,30 @@ public class Main {
 					System.out.println("게시글이 없습니다.");
 					continue;
 				}
-				System.out.println("번호	|	제목");
+				System.out.println("번호	|	제목	|	날짜	");
 				for (int i = articles.size() - 1; i >= 0; i--) {
 					Article article = articles.get(i);
 
-					System.out.printf("%d	|	%s\n", article.id, article.title);
+					System.out.printf("%d	|	%s	|	%s	\n", article.id, article.title, article.regDate);
 
 				}
 			}
 			// 게시글 쓰기
 			else if (cmd.equals("article write")) {
 				int id = lastArticleId + 1;
-				
+
 				lastArticleId = id;
-				
+				String regDate = Util.getNowDateStr();
+				System.out.println("날짜 : " + regDate);
 				System.out.printf("제목 : ");
 				String title = sc.nextLine();
 
 				System.out.printf("내용 : ");
 				String body = sc.nextLine();
-				String nowTime = sdf1.format(now);
-				System.out.println(sdf1.format(now));
-				
-				Article article = new Article(id, title, body, nowTime);
+
+				Article article = new Article(id, regDate, title, body);
 
 				articles.add(article);
-				
 
 				System.out.println(id + "번 글이 생성되었습니다");
 			}
@@ -71,18 +65,18 @@ public class Main {
 			else if (cmd.startsWith("article detail ")) {
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
-				
+
 				// 특정 게시물을 찾는 기능
-				
+
 				Article foundArticle = null;
 				for (int i = 0; i < articles.size(); i++) {
 					Article article = articles.get(i);
 
 					if (article.id == id) {
-						
+
 						foundArticle = article;
-						//System.out.printf("%d번 게시물은 존재합니다.\n", id);
-						
+						// System.out.printf("%d번 게시물은 존재합니다.\n", id);
+
 						break;
 					}
 				}
@@ -90,13 +84,13 @@ public class Main {
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
 				}
-				
+
 				// 특정 게시물 출력
 				System.out.printf("번호 : %d\n", foundArticle.id);
-				System.out.printf("날짜 : %s\n", foundArticle.nowTime);
+				System.out.printf("날짜 : %s\n", foundArticle.regDate);
 				System.out.printf("제목 : %s\n", foundArticle.title);
 				System.out.printf("내용 : %s\n", foundArticle.body);
-				
+
 			}
 			// 게시물 삭제
 			else if (cmd.startsWith("article delete ")) {
@@ -106,29 +100,26 @@ public class Main {
 				// 0으로 초기화 할 경우 articles[0]은 삭제되지 않음.
 				int foundIndex = -1;
 				// 특정 게시물 찾는 기능
-				
-				for(int i = 0; i < articles.size(); i++){
+
+				for (int i = 0; i < articles.size(); i++) {
 					Article article = articles.get(i);
-					
-					if(article.id == id) {
-						
+
+					if (article.id == id) {
+
 						foundIndex = i;
-						
+
 						break;
 					}
 				}
-				
+
 				// 존재하지 않을 경우
-				if(foundIndex == -1) {
+				if (foundIndex == -1) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
 				}
-				
-				
+
 				articles.remove(foundIndex);
-				
+
 				System.out.printf("%d번 게시물이 삭제되었습니다.\n", id);
-				
-				
 
 			} else
 				System.out.println("존재하지 않는 명령어입니다.");
@@ -142,16 +133,15 @@ public class Main {
 
 class Article {
 	int id;
-	
+	String regDate;
 	String title;
 	String body;
-	String nowTime;
 
-	Article(int id, String title, String body, String nowTime) {
+	Article(int id, String regDate, String title, String body) {
 		this.id = id;
+		this.regDate = regDate;
 		this.title = title;
 		this.body = body;
-		this.nowTime = nowTime;
 
 	}
 }
