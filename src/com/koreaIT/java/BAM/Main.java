@@ -6,14 +6,21 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+	// static (9일차 참고) 
+	private static List<Article> articles;
+	static {
+		articles = new ArrayList<>();
+	}
 	public static void main(String[] args) {
 
 		System.out.println("== 프로그램 시작 ==");
-
+		makeTestDate();
+		
+		
 		Scanner sc = new Scanner(System.in);
 		int lastArticleId = 0;
 
-		List<Article> articles = new ArrayList<>();
+		
 
 		while (true) {
 			System.out.printf("명령어 >> ");
@@ -44,7 +51,7 @@ public class Main {
 			}
 			// 게시글 쓰기
 			else if (cmd.equals("article write")) {
-				int id = lastArticleId + 1;
+				int id = articles.size() + 1;
 
 				lastArticleId = id;
 				String regDate = Util.getNowDateStr();
@@ -93,7 +100,7 @@ public class Main {
 				System.out.printf("날짜 : %s\n", foundArticle.regDate);
 				System.out.printf("제목 : %s\n", foundArticle.title);
 				System.out.printf("내용 : %s\n", foundArticle.body);
-				System.out.printf("내용 : %d\n", foundArticle.viewCnt);
+				System.out.printf("조회수 : %d\n", foundArticle.viewCnt);
 
 			}
 			// 게시물 삭제
@@ -166,6 +173,16 @@ public class Main {
 
 		sc.close();
 	}
+
+	private static void makeTestDate() {
+		System.out.println("테스트를 위한 게시물 데이터를 생성합니다.");
+		articles.add(new Article( 1,Util.getNowDateStr(),"제목 1", "내용 1", 11));
+		articles.add(new Article( 2,Util.getNowDateStr(),"제목 2", "내용 2",22));
+		articles.add(new Article( 3,Util.getNowDateStr(),"제목 3", "내용 3",33));
+	}
+
+		
+	
 }
 
 class Article {
@@ -175,11 +192,17 @@ class Article {
 	String body;
 	int viewCnt;
 	Article(int id, String regDate, String title, String body) {
+		this(id,regDate,title, body,0);
+		
+		
+	}
+	Article(int id, String regDate, String title, String body, int viewCnt) {
 		this.id = id;
 		this.regDate = regDate;
 		this.title = title;
 		this.body = body;
-		this.viewCnt = viewCnt;
+		this.viewCnt=viewCnt;
+		
 	}
 	public void addViewCnt() {
 		viewCnt = viewCnt+1;
