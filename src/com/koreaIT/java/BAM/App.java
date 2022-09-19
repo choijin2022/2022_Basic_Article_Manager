@@ -24,7 +24,7 @@ public class App {
 
 		while (true) {
 
-			System.out.printf("명령어) ");
+			System.out.printf("명령어 > ");
 			String cmd = sc.nextLine().trim();
 
 			if (cmd.length() == 0) {
@@ -63,20 +63,14 @@ public class App {
 							article.viewCnt);
 				}
 			} else if (cmd.startsWith("article detail ")) {
-
+				
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
+				
+				// 수정 1
+				Article foundArticle = getArticleById(); //리턴 타입 Article
 
-				Article foundArticle = null;
-
-				for (int i = 0; i < articles.size(); i++) {
-					Article article = articles.get(i);
-
-					if (article.id == id) {
-						foundArticle = article;
-						break;
-					}
-				}
+				
 
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
@@ -155,6 +149,19 @@ public class App {
 		System.out.println("== 프로그램 끝 ==");
 
 		sc.close();
+	}
+
+	private Article getArticleById() {
+		 // 리턴 -> null 또는 Article 
+		for (int i = 0; i < articles.size(); i++) {
+			Article article = articles.get(i);
+
+			if (article.id == id) {
+				foundArticle = article;
+				break;
+			}
+		}
+		return null;
 	}
 
 	private void makeTestData() {
