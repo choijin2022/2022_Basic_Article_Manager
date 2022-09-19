@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.koreaIT.java.BAM.dto.Article;
-import com.koreaIT.java.BAM.Util;
+import com.koreaIT.java.BAM.util.Util;
 
 public class App {
 	private List<Article> articles;
@@ -68,8 +68,11 @@ public class App {
 				int id = Integer.parseInt(cmdBits[2]);
 				
 				// 수정 1
-				Article foundArticle = getArticleById(); //리턴 타입 Article
-
+				//리턴 타입 Article
+				// 수정되는 부분 1
+				// id 값을 어떻게 전달해야 하는지..???
+				
+				Article foundArticle = getArticleById(id);
 				
 
 				if (foundArticle == null) {
@@ -90,16 +93,9 @@ public class App {
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
 
-				Article foundArticle = null;
-
-				for (int i = 0; i < articles.size(); i++) {
-					Article article = articles.get(i);
-
-					if (article.id == id) {
-						foundArticle = article;
-						break;
-					}
-				}
+				
+				// 수정 2 
+				Article foundArticle = getArticleById(id);
 
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
@@ -122,15 +118,18 @@ public class App {
 				int id = Integer.parseInt(cmdBits[2]);
 
 				int foundIndex = -1;
-
-				for (int i = 0; i < articles.size(); i++) {
-					Article article = articles.get(i);
-
-					if (article.id == id) {
-						foundIndex = i;
-						break;
-					}
-				}
+				// 수정 3
+				// 번호 1이 지워지지 않고 Cannot read field "id" because "foundArticle" is null 오류 나옴.
+				Article foundArticle = getArticleById(id-1);
+				foundIndex = foundArticle.id;
+//				for (int i = 0; i < articles.size(); i++) {
+//					Article article = articles.get(i);
+//
+//					if (article.id == id) {
+//						foundIndex = i;
+//						break;
+//					}
+//				}
 
 				if (foundIndex == -1) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
@@ -151,14 +150,14 @@ public class App {
 		sc.close();
 	}
 
-	private Article getArticleById() {
-		 // 리턴 -> null 또는 Article 
+	private Article getArticleById(int id) {
+		int mid = id;
 		for (int i = 0; i < articles.size(); i++) {
 			Article article = articles.get(i);
-
-			if (article.id == id) {
-				foundArticle = article;
-				break;
+			
+			if (article.id == mid) {
+				
+				return article;
 			}
 		}
 		return null;
