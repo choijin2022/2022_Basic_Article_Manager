@@ -5,13 +5,16 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.koreaIT.java.BAM.dto.Article;
+import com.koreaIT.java.BAM.dto.Member;
 import com.koreaIT.java.BAM.util.Util;
 
 public class App {
 	private List<Article> articles;
+	private List<Member> members;
 
 	App() {
 		articles = new ArrayList<>();
+		members = new ArrayList<>();
 	}
 
 	public void run() {
@@ -24,7 +27,7 @@ public class App {
 
 		while (true) {
 
-			System.out.printf("명령어 > ");
+			System.out.printf("명령어) ");
 			String cmd = sc.nextLine().trim();
 
 			if (cmd.length() == 0) {
@@ -36,7 +39,25 @@ public class App {
 				break;
 			}
 
-			if (cmd.equals("article write")) {
+			if (cmd.equals("member join")) {
+				int id = members.size() + 1;
+				String regDate = Util.getNowDateStr();
+				System.out.printf("로그인 아이디 : ");
+				String loginId = sc.nextLine();
+				System.out.printf("로그인 비밀번호 : ");
+				String loginPw = sc.nextLine();
+				System.out.printf("비밀번호 확인 : ");
+				String loginPwChk = sc.nextLine();
+				System.out.printf("이름 : ");
+				String name = sc.nextLine();
+
+				Member member = new Member(id, regDate, loginId, loginPw, name);
+
+				members.add(member);
+
+				System.out.printf("%s회원님 환영합니다\n", loginId);
+
+			} else if (cmd.equals("article write")) {
 				int id = articles.size() + 1;
 				String regDate = Util.getNowDateStr();
 				System.out.printf("제목 : ");
@@ -50,30 +71,45 @@ public class App {
 
 				System.out.printf("%d번 글이 생성되었습니다\n", id);
 
-			} else if (cmd.equals("article list")) {
+			} else if (cmd.startsWith("article list")) {
 				if (articles.size() == 0) {
 					System.out.println("게시물이 없습니다");
 					continue;
 				}
 
+				List<Article> forPrintArticles = articles;
+
+				String searchKeyword = cmd.substring("article list".length()).trim();
+
+				if (searchKeyword.length() > 0) {
+
+					System.out.println("검색어 : " + searchKeyword);
+
+					forPrintArticles = new ArrayList<>();
+
+					for (Article article : articles) {
+						if (article.title.contains(searchKeyword)) {
+							forPrintArticles.add(article);
+						}
+					}
+					if (forPrintArticles.size() == 0) {
+						System.out.println("검색결과가 없습니다");
+						continue;
+					}
+				}
+
 				System.out.println("번호	|	제목	|	날짜			|	조회");
-				for (int i = articles.size() - 1; i >= 0; i--) {
-					Article article = articles.get(i);
+				for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
+					Article article = forPrintArticles.get(i);
 					System.out.printf("%d	|	%s	|	%s	|	%d\n", article.id, article.title, article.regDate,
 							article.viewCnt);
 				}
 			} else if (cmd.startsWith("article detail ")) {
-				
+
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
-				
-				// 수정 1
-				//리턴 타입 Article
-				// 수정되는 부분 1
-				// id 값을 어떻게 전달해야 하는지..???
-				
+
 				Article foundArticle = getArticleById(id);
-				
 
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
@@ -93,8 +129,6 @@ public class App {
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
 
-				
-				// 수정 2 
 				Article foundArticle = getArticleById(id);
 
 				if (foundArticle == null) {
@@ -117,19 +151,7 @@ public class App {
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
 
-				int foundIndex = -1;
-				// 수정 3
-				// 번호 1이 지워지지 않고 Cannot read field "id" because "foundArticle" is null 오류 나옴.
-				Article foundArticle = getArticleById(id-1);
-				foundIndex = foundArticle.id;
-//				for (int i = 0; i < articles.size(); i++) {
-//					Article article = articles.get(i);
-//
-//					if (article.id == id) {
-//						foundIndex = i;
-//						break;
-//					}
-//				}
+				int foundIndex = getArticleIndexById(id);
 
 				if (foundIndex == -1) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
@@ -150,15 +172,23 @@ public class App {
 		sc.close();
 	}
 
-	private Article getArticleById(int id) {
-		int mid = id;
-		for (int i = 0; i < articles.size(); i++) {
-			Article article = articles.get(i);
-			
-			if (article.id == mid) {
-				
-				return article;
+	private int getArticleIndexById(int id) {
+		int i = 0;
+
+		for (Article article : articles) {
+			if (article.id == id) {
+				return i;
 			}
+			i++;
+		}
+		return -1;
+	}
+
+	private Article getArticleById(int id) {
+		int index = getArticleIndexById(id);
+
+		if (index != -1) {
+			return articles.get(index);
 		}
 		return null;
 	}

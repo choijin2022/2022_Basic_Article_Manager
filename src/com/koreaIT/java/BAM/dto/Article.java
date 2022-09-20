@@ -1,16 +1,12 @@
 package com.koreaIT.java.BAM.dto;
 
-public class Article {
-
-	public int id;
-	public String regDate;
+public class Article extends Dto {
 	public String title;
 	public String body;
 	public int viewCnt;
 
 	public Article(int id, String regDate, String title, String body) {
 		this(id, regDate, title, body, 0);
-
 	}
 
 	public Article(int id, String regDate, String title, String body, int viewCnt) {
@@ -19,11 +15,9 @@ public class Article {
 		this.title = title;
 		this.body = body;
 		this.viewCnt = viewCnt;
-
 	}
 
 	public void addViewCnt() {
-		viewCnt = viewCnt + 1;
+		viewCnt++;
 	}
-
 }
