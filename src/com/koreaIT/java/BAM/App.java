@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.koreaIT.java.BAM.controller.ArticleController;
+import com.koreaIT.java.BAM.controller.MemberController;
 import com.koreaIT.java.BAM.dto.Article;
 import com.koreaIT.java.BAM.dto.Member;
 import com.koreaIT.java.BAM.util.Util;
@@ -24,6 +26,9 @@ public class App {
 		makeTestData();
 
 		Scanner sc = new Scanner(System.in);
+		
+		MemberController memberController = new MemberController(members, sc);
+		ArticleController articleController = new ArticleController(articles, sc);
 
 		while (true) {
 
@@ -40,128 +45,17 @@ public class App {
 			}
 
 			if (cmd.equals("member join")) {
-				int id = members.size() + 1;
-				String regDate = Util.getNowDateStr();
-				System.out.printf("로그인 아이디 : ");
-				String loginId = sc.nextLine();
-				System.out.printf("로그인 비밀번호 : ");
-				String loginPw = sc.nextLine();
-				System.out.printf("비밀번호 확인 : ");
-				String loginPwChk = sc.nextLine();
-				System.out.printf("이름 : ");
-				String name = sc.nextLine();
-
-				Member member = new Member(id, regDate, loginId, loginPw, name);
-
-				members.add(member);
-
-				System.out.printf("%s회원님 환영합니다\n", loginId);
-
+				memberController.doJoin();
 			} else if (cmd.equals("article write")) {
-				int id = articles.size() + 1;
-				String regDate = Util.getNowDateStr();
-				System.out.printf("제목 : ");
-				String title = sc.nextLine();
-				System.out.printf("내용 : ");
-				String body = sc.nextLine();
-
-				Article article = new Article(id, regDate, title, body);
-
-				articles.add(article);
-
-				System.out.printf("%d번 글이 생성되었습니다\n", id);
-
+				articleController.doWrite();
 			} else if (cmd.startsWith("article list")) {
-				if (articles.size() == 0) {
-					System.out.println("게시물이 없습니다");
-					continue;
-				}
-
-				List<Article> forPrintArticles = articles;
-
-				String searchKeyword = cmd.substring("article list".length()).trim();
-
-				if (searchKeyword.length() > 0) {
-
-					System.out.println("검색어 : " + searchKeyword);
-
-					forPrintArticles = new ArrayList<>();
-
-					for (Article article : articles) {
-						if (article.title.contains(searchKeyword)) {
-							forPrintArticles.add(article);
-						}
-					}
-					if (forPrintArticles.size() == 0) {
-						System.out.println("검색결과가 없습니다");
-						continue;
-					}
-				}
-
-				System.out.println("번호	|	제목	|	날짜			|	조회");
-				for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
-					Article article = forPrintArticles.get(i);
-					System.out.printf("%d	|	%s	|	%s	|	%d\n", article.id, article.title, article.regDate,
-							article.viewCnt);
-				}
+				articleController.showList(cmd);
 			} else if (cmd.startsWith("article detail ")) {
-
-				String[] cmdBits = cmd.split(" ");
-				int id = Integer.parseInt(cmdBits[2]);
-
-				Article foundArticle = getArticleById(id);
-
-				if (foundArticle == null) {
-					System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
-					continue;
-				}
-
-				foundArticle.addViewCnt();
-
-				System.out.printf("번호 : %d\n", foundArticle.id);
-				System.out.printf("날짜 : %s\n", foundArticle.regDate);
-				System.out.printf("제목 : %s\n", foundArticle.title);
-				System.out.printf("내용 : %s\n", foundArticle.body);
-				System.out.printf("조회 : %d\n", foundArticle.viewCnt);
-
+				articleController.showDetail(cmd);
 			} else if (cmd.startsWith("article modify ")) {
-
-				String[] cmdBits = cmd.split(" ");
-				int id = Integer.parseInt(cmdBits[2]);
-
-				Article foundArticle = getArticleById(id);
-
-				if (foundArticle == null) {
-					System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
-					continue;
-				}
-
-				System.out.printf("수정할 제목 : ");
-				String title = sc.nextLine();
-				System.out.printf("수정할 내용 : ");
-				String body = sc.nextLine();
-
-				foundArticle.title = title;
-				foundArticle.body = body;
-
-				System.out.printf("%d번글이 수정되었습니다\n", id);
-
+				articleController.doModify(cmd);
 			} else if (cmd.startsWith("article delete ")) {
-
-				String[] cmdBits = cmd.split(" ");
-				int id = Integer.parseInt(cmdBits[2]);
-
-				int foundIndex = getArticleIndexById(id);
-
-				if (foundIndex == -1) {
-					System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
-					continue;
-				}
-
-				articles.remove(foundIndex);
-
-				System.out.printf("%d번 게시물이 삭제되었습니다\n", id);
-
+				articleController.doDelete(cmd);
 			} else {
 				System.out.println("존재하지 않는 명령어 입니다");
 			}
@@ -170,27 +64,6 @@ public class App {
 		System.out.println("== 프로그램 끝 ==");
 
 		sc.close();
-	}
-
-	private int getArticleIndexById(int id) {
-		int i = 0;
-
-		for (Article article : articles) {
-			if (article.id == id) {
-				return i;
-			}
-			i++;
-		}
-		return -1;
-	}
-
-	private Article getArticleById(int id) {
-		int index = getArticleIndexById(id);
-
-		if (index != -1) {
-			return articles.get(index);
-		}
-		return null;
 	}
 
 	private void makeTestData() {
