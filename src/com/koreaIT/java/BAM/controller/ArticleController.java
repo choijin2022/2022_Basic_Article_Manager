@@ -7,13 +7,18 @@ import java.util.Scanner;
 import com.koreaIT.java.BAM.dto.Article;
 import com.koreaIT.java.BAM.util.Util;
 
-public class ArticleController {
+public class ArticleController extends Controller{
 	List<Article> articles;
 	Scanner sc;
 	public ArticleController(List<Article> articles, Scanner sc) {
 		this.articles = articles;
 		this.sc = sc;
 	}
+	@Override
+	public void doAction() {
+				
+	}
+	
 	public void doWrite() {
 		int id = articles.size() + 1;
 		String regDate = Util.getNowDateStr();
@@ -138,5 +143,6 @@ public class ArticleController {
 		}
 		return null;
 	}
+	
 
 }

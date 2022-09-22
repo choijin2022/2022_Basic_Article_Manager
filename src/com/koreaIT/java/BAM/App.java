@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.koreaIT.java.BAM.controller.ArticleController;
+import com.koreaIT.java.BAM.controller.Controller;
 import com.koreaIT.java.BAM.controller.MemberController;
 import com.koreaIT.java.BAM.dto.Article;
 import com.koreaIT.java.BAM.dto.Member;
@@ -43,7 +44,29 @@ public class App {
 			if (cmd.equals("exit")) {
 				break;
 			}
-
+			// 수정
+			
+			String[] cmdBits = cmd.split(" ");
+			if(cmdBits.length == 1) {
+				System.out.println("명령어를 확인해주세요");
+				continue;
+			}
+			
+			String controllerName = cmdBits[0];
+			String methodName = cmdBits[1];
+			Controller controller = null;
+			
+			if(controllerName.equals("article")) {
+				controller = articleController;
+				
+			}else if(controllerName.equals("member")) {
+				controller = memberController;
+			}else {
+				System.out.println("존재하지 않는 명령어 입니다.");
+				continue;
+			}
+			controller.doAction();
+			
 			if (cmd.equals("member join")) {
 				memberController.doJoin();
 			} else if (cmd.equals("article write")) {

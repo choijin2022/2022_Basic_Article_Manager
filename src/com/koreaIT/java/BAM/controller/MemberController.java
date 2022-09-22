@@ -6,13 +6,18 @@ import java.util.Scanner;
 import com.koreaIT.java.BAM.dto.Member;
 import com.koreaIT.java.BAM.util.Util;
 
-public class MemberController {
+public class MemberController extends Controller{
 	List<Member> members;
 	Scanner sc;
 
 	public MemberController(List<Member> members, Scanner sc) {
 		this.members = members;
 		this.sc = sc;
+	}
+	
+	@Override
+	public void doAction() {
+				
 	}
 
 	public void doJoin() {
