@@ -10,13 +10,14 @@ import com.koreaIT.java.BAM.util.Util;
 public class ArticleController extends Controller{
 	List<Article> articles;
 	Scanner sc;
+	String cmd;
 	public ArticleController(List<Article> articles, Scanner sc) {
 		this.articles = articles;
 		this.sc = sc;
 	}
 	@Override
-	public void doAction() {
-				
+	public void doAction(String cmd) {
+		this.cmd = cmd;	
 	}
 	
 	public void doWrite() {

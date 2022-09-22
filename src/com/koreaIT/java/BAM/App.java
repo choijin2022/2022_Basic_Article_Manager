@@ -53,7 +53,8 @@ public class App {
 			}
 			
 			String controllerName = cmdBits[0];
-			String methodName = cmdBits[1];
+			String memberName = cmdBits[1];
+			
 			Controller controller = null;
 			
 			if(controllerName.equals("article")) {
@@ -65,7 +66,10 @@ public class App {
 				System.out.println("존재하지 않는 명령어 입니다.");
 				continue;
 			}
-			controller.doAction();
+			
+			// 
+			controller.doAction(cmd);
+			
 			
 			if (cmd.equals("member join")) {
 				memberController.doJoin();
