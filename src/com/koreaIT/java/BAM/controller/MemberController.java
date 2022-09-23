@@ -13,7 +13,8 @@ public class MemberController extends Controller {
 
 	private Scanner sc;
 	private String cmd;
-
+	private Member loginedMember;
+	
 	public MemberController(Scanner sc) {
 		this.members = new ArrayList<>();
 		this.sc = sc;
@@ -26,6 +27,9 @@ public class MemberController extends Controller {
 		switch (methodName) {
 		case "join":
 			doJoin();
+			break;
+		case "login":
+			doLogin();
 			break;
 		default:
 			System.out.println("존재하지 않는 명령어입니다.");
@@ -74,6 +78,39 @@ public class MemberController extends Controller {
 		members.add(member);
 
 		System.out.printf("%s회원님 환영합니다\n", loginId);
+	}
+
+	// 로그인 기능
+	private void doLogin() {
+		System.out.print("아이디를 입력하세요 : ");
+		String loginId = sc.nextLine();
+		System.out.print("비밀번호를 입력하세요 : ");
+		String loginPw = sc.nextLine();
+		
+		
+		// 사용자의 입력아이디와 일치하는 회원이 있는지 여부 
+		Member member = getMemberByLoginId(loginId);
+		if(member == null) {
+			System.out.println("일치하는 회원이 없습니다.");
+			return;
+		}
+		if(member.loginPw.equals(loginPw)==false) {
+			System.out.println("비밀번호를 확인해주세요");
+			return;
+		}
+		
+		// 대체 세션 기능
+		loginedMember = member;
+		System.out.println("로그인 성공!");
+	}
+
+
+	private Member getMemberByLoginId(String loginId) {
+		int index = getMemberIndexByLoginId(loginId);
+		if(index != -1) {
+			return members.get(index);
+		}
+		return null;
 	}
 
 	private boolean loginIdChk(String loginId) {
