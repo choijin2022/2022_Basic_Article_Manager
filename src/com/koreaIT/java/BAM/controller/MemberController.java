@@ -31,12 +31,22 @@ public class MemberController extends Controller {
 		case "login":
 			doLogin();
 			break;
+		case "logout":
+			doLogout();
+			break;
+		case "profile":
+			showProfile();
+			break;
 		default:
 			System.out.println("존재하지 않는 명령어입니다.");
 			break;
 
 		}
 	}
+
+	
+
+
 
 	private void doJoin() {
 		int id = members.size() + 1;
@@ -82,6 +92,10 @@ public class MemberController extends Controller {
 
 	// 로그인 기능
 	private void doLogin() {
+		if(isLogined()) {
+			System.out.println("로그인 상태입니다");
+			return;
+		}
 		System.out.print("아이디를 입력하세요 : ");
 		String loginId = sc.nextLine();
 		System.out.print("비밀번호를 입력하세요 : ");
@@ -101,8 +115,39 @@ public class MemberController extends Controller {
 		
 		// 대체 세션 기능
 		loginedMember = member;
-		System.out.println("로그인 성공!");
+		System.out.printf("로그인 성공! %s님 환영합니다.\n", loginedMember.loginId);
 	}
+	
+	// 프로필 보기
+	private void showProfile() {
+		
+		if(loginedMember == null) {
+			System.out.println("로그아웃 상태입니다");
+			return;
+		}
+		
+			
+		System.out.println("== 내 정보 ==");
+		System.out.printf("로그인 아이디 : %s\n",loginedMember.loginId);
+		System.out.printf("이름 : %s\n",loginedMember.name);
+		
+	}
+	// 로그인/로그아웃 확인 메서드
+	private boolean isLogined() {
+		return loginedMember != null;
+	}
+	
+	private void doLogout() {
+		
+		if(isLogined()==false) {
+			System.out.println("로그인 상태가 아닙니다");
+			return;
+		}
+		loginedMember = null;
+		
+		System.out.println("로그아웃 되었습니다.");
+	}
+	
 
 
 	private Member getMemberByLoginId(String loginId) {
@@ -133,6 +178,13 @@ public class MemberController extends Controller {
 			i++;
 		}
 		return -1;
+	}
+	
+	
+	public void makeTestData2() {
+		members.add(new Member(1, Util.getNowDateStr(), "choonsik", "test", "choonsik"));
+		members.add(new Member(2, Util.getNowDateStr(), "id2", "test", "name2"));
+		members.add(new Member(3, Util.getNowDateStr(), "id3", "test", "name3"));
 	}
 
 }
