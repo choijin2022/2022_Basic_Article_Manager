@@ -12,8 +12,8 @@ public class MemberController extends Controller {
 	// List<Member> members;
 
 	private Scanner sc;
-	private String cmd;
-	private Member loginedMember;
+	//private String cmd;
+	
 	
 	public MemberController(Scanner sc) {
 		this.members = new ArrayList<>();
@@ -22,7 +22,7 @@ public class MemberController extends Controller {
 
 	@Override
 	public void doAction(String cmd, String methodName) {
-		this.cmd = cmd;
+		
 
 		switch (methodName) {
 		case "join":
@@ -132,10 +132,6 @@ public class MemberController extends Controller {
 		System.out.printf("이름 : %s\n",loginedMember.name);
 		
 	}
-	// 로그인/로그아웃 확인 메서드
-	private boolean isLogined() {
-		return loginedMember != null;
-	}
 	
 	private void doLogout() {
 		
@@ -181,8 +177,8 @@ public class MemberController extends Controller {
 	}
 	
 	
-	public void makeTestData2() {
-		members.add(new Member(1, Util.getNowDateStr(), "choonsik", "test", "choonsik"));
+	public void makeTestData() {
+		members.add(new Member(1, Util.getNowDateStr(), "test", "test", "choonsik"));
 		members.add(new Member(2, Util.getNowDateStr(), "id2", "test", "name2"));
 		members.add(new Member(3, Util.getNowDateStr(), "id3", "test", "name3"));
 	}
