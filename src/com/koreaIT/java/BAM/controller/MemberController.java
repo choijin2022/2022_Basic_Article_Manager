@@ -115,7 +115,7 @@ public class MemberController extends Controller {
 		
 		// 대체 세션 기능
 		loginedMember = member;
-		System.out.printf("로그인 성공! %s님 환영합니다.\n", loginedMember.loginId);
+		System.out.printf("로그인 성공! %s님 환영합니다.\n", loginedMember.name);
 	}
 	
 	// 프로필 보기
