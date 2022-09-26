@@ -179,8 +179,8 @@ public class MemberController extends Controller {
 	
 	public void makeTestData() {
 		members.add(new Member(1, Util.getNowDateStr(), "test", "test", "choonsik"));
-		members.add(new Member(2, Util.getNowDateStr(), "id2", "test", "name2"));
-		members.add(new Member(3, Util.getNowDateStr(), "id3", "test", "name3"));
+		members.add(new Member(2, Util.getNowDateStr(), "test2", "test", "name2"));
+		members.add(new Member(3, Util.getNowDateStr(), "test3", "test", "name3"));
 	}
 
 }

@@ -43,9 +43,16 @@ public class ArticleController extends Controller {
 			showDetail();
 			break;
 		case "modify":
+			// 1. 로그인 상태확인
+			if(isLogined()==false) {
+				System.out.println("로그인 후 이용해주세요");
+				break;
+			}
+			// 2. 수정하려고 하는 게시글의 번호와 로그인 유저의 정보가 일치하는지 --> 게시글 번호를 사용자에게 받아야함
 			doModify();
 			break;
 		case "delete":
+			
 			doDelete();
 			break;
 		default:
@@ -59,8 +66,7 @@ public class ArticleController extends Controller {
 		// 작성자의 이름 확인
 		//System.out.println(loginedMember.name);
 		
-		
-		
+
 		int id = articles.size() + 1;
 		String regDate = Util.getNowDateStr();
 		
@@ -155,7 +161,14 @@ public class ArticleController extends Controller {
 			System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
 			return;
 		}
-
+		// 2. 수정하려고 하는 게시글의 번호가 현재 로그인한 유저의 번호와 일치하는지 여부 확인
+		
+		if(loginedMember.id != foundArticle.memberId) {
+			System.out.println("수정 권한이 없습니다.");
+			return;
+			
+		}
+		
 		System.out.printf("수정할 제목 : ");
 		String title = sc.nextLine();
 		System.out.printf("수정할 내용 : ");
@@ -165,6 +178,7 @@ public class ArticleController extends Controller {
 		foundArticle.body = body;
 
 		System.out.printf("%d번글이 수정되었습니다\n", id);
+		
 	}
 
 	private void doDelete() {
@@ -176,14 +190,21 @@ public class ArticleController extends Controller {
 		}
 		int id = Integer.parseInt(cmdBits[2]);
 
-		int foundIndex = getArticleIndexById(id);
-
-		if (foundIndex == -1) {
+		//int foundIndex = getArticleIndexById(id);
+		Article foundArticle = getArticleById(id);
+		if (foundArticle == null) {
 			System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
 			return;
 		}
+		
+		if(loginedMember.id != foundArticle.memberId) {
+			System.out.println("수정 권한이 없습니다.");
+			return;
+			
+		}
+		
 
-		articles.remove(foundIndex);
+		articles.remove(foundArticle);
 
 		System.out.printf("%d번 게시물이 삭제되었습니다\n", id);
 	}
