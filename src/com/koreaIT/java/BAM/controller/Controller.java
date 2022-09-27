@@ -10,7 +10,7 @@ public abstract class Controller {
 	public abstract void makeTestData();
 
 	// 로그인/로그아웃 확인 메서드
-	public boolean isLogined() {
+	public static boolean isLogined() {
 		return loginedMember != null;
 	}
 

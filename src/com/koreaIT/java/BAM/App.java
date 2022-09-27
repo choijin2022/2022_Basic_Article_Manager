@@ -22,8 +22,12 @@ public class App {
 		
 		articleController.makeTestData();
 		memberController.makeTestData();
+		
+		
+		
 		while (true) {
-
+			// 로그인 필수기능 비필수 기능 분리
+			
 			System.out.printf("명령어) ");
 			String cmd = sc.nextLine().trim();
 
@@ -35,7 +39,7 @@ public class App {
 			if (cmd.equals("exit")) {
 				break;
 			}
-			// 수정
+			
 			
 			String[] cmdBits = cmd.split(" ");
 			if(cmdBits.length == 1) {
@@ -48,6 +52,8 @@ public class App {
 			
 			Controller controller = null;
 			
+			
+			
 			if(controllerName.equals("article")) {
 				controller = articleController;
 				
@@ -58,7 +64,30 @@ public class App {
 				continue;
 			}
 			
-			// 
+			
+			// 로그인 상태??
+			//String actionName = controllerName+ "/"+methodName;
+			switch(methodName) {
+			case "write" :
+			case "modify" :
+			case "delete" :
+			case "logout" :
+			case "profile" :
+				if(Controller.isLogined()==false) {
+					System.out.println("로그인 후 이용해주세요");
+					continue;
+				}
+				break;
+			case "login":
+			case "join":
+				if(Controller.isLogined()) {
+					System.out.println("로그아웃 후 이용해주세요");
+					continue;
+				}
+				break;
+			}
+			
+
 			controller.doAction(cmd,methodName);
 			
 			

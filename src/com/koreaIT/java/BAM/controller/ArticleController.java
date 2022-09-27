@@ -28,11 +28,6 @@ public class ArticleController extends Controller {
 
 		switch (methodName) {
 		case "write":
-			// 수정
-			if(isLogined()==false) {
-				System.out.println("로그인 후 이용해주세요");
-				break;
-			}
 			
 			doWrite();
 			break;
@@ -43,12 +38,7 @@ public class ArticleController extends Controller {
 			showDetail();
 			break;
 		case "modify":
-			// 1. 로그인 상태확인
-			if(isLogined()==false) {
-				System.out.println("로그인 후 이용해주세요");
-				break;
-			}
-			// 2. 수정하려고 하는 게시글의 번호와 로그인 유저의 정보가 일치하는지 --> 게시글 번호를 사용자에게 받아야함
+			
 			doModify();
 			break;
 		case "delete":

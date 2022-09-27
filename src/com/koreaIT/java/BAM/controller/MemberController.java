@@ -92,10 +92,7 @@ public class MemberController extends Controller {
 
 	// 로그인 기능
 	private void doLogin() {
-		if(isLogined()) {
-			System.out.println("로그인 상태입니다");
-			return;
-		}
+		
 		System.out.print("아이디를 입력하세요 : ");
 		String loginId = sc.nextLine();
 		System.out.print("비밀번호를 입력하세요 : ");
@@ -120,13 +117,7 @@ public class MemberController extends Controller {
 	
 	// 프로필 보기
 	private void showProfile() {
-		
-		if(loginedMember == null) {
-			System.out.println("로그아웃 상태입니다");
-			return;
-		}
-		
-			
+					
 		System.out.println("== 내 정보 ==");
 		System.out.printf("로그인 아이디 : %s\n",loginedMember.loginId);
 		System.out.printf("이름 : %s\n",loginedMember.name);
@@ -135,10 +126,6 @@ public class MemberController extends Controller {
 	
 	private void doLogout() {
 		
-		if(isLogined()==false) {
-			System.out.println("로그인 상태가 아닙니다");
-			return;
-		}
 		loginedMember = null;
 		
 		System.out.println("로그아웃 되었습니다.");
