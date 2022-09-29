@@ -6,7 +6,6 @@ import java.util.Scanner;
 import com.koreaIT.java.BAM.container.Container;
 import com.koreaIT.java.BAM.dto.Article;
 import com.koreaIT.java.BAM.dto.Member;
-import com.koreaIT.java.BAM.service.ArticleService;
 import com.koreaIT.java.BAM.util.Util;
 
 public class ArticleController extends Controller {
@@ -80,7 +79,7 @@ public class ArticleController extends Controller {
 			Article article = forPrintArticles.get(i);
 
 			String writerName = null;
-
+			// 
 			List<Member> members = Container.memberDao.members;
 
 			for (Member member : members) {
@@ -105,23 +104,24 @@ public class ArticleController extends Controller {
 
 		int id = Integer.parseInt(cmdBits[2]);
 
-		//
+		
 		Article foundArticle = Container.articleService.getArticleById(id);
 
 		if (foundArticle == null) {
 			System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
 			return;
 		}
-		String writerName = null;
-
-		List<Member> members = Container.memberDao.members;
-
-		for (Member member : members) {
-			if (foundArticle.memberId == member.id) {
-				writerName = member.name;
-				break;
-			}
-		}
+		
+		String writerName = Container.memberService.getWriterName(foundArticle.memberId);
+//		//
+//		List<Member> members = Container.memberDao.members;
+//
+//		for (Member member : members) {
+//			if (foundArticle.memberId == member.id) {
+//				writerName = member.name;
+//				break;
+//			}
+//		}
 
 		foundArticle.addViewCnt();
 

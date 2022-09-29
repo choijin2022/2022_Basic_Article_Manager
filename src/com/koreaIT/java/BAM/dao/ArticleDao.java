@@ -21,27 +21,29 @@ public class ArticleDao extends Dao {
 	public List<Article> getForPrintArticles(String searchKeyword) {
 		// if (searchKeyword.length() > 0)
 		// 추후 query문으로 대체될것임
-		if (searchKeyword != null) {
+		//if (searchKeyword != null && searchKeyword.length() != 0) {
+			if (searchKeyword != null) {
 
-			System.out.println("검색어 : " + searchKeyword);
+				System.out.println("검색어 : " + searchKeyword);
 
-			List<Article> forPrintArticles = new ArrayList<>();
+				List<Article> forPrintArticles = new ArrayList<>();
 
-			for (Article article : articles) {
-				if (article.title.contains(searchKeyword)) {
-					forPrintArticles.add(article);
+				for (Article article : articles) {
+					if (article.title.contains(searchKeyword)) {
+						forPrintArticles.add(article);
+					}
 				}
+
+				return forPrintArticles;
+
 			}
-
-			return forPrintArticles;
-
-		}
-		return articles;
+			return articles;
+		
 	}
 
 	public void remove(Article foundArticle) {
 		articles.remove(foundArticle);
-		
+
 	}
 
 	//
@@ -66,7 +68,5 @@ public class ArticleDao extends Dao {
 		}
 		return null;
 	}
-
-	
 
 }
