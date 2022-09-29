@@ -6,7 +6,7 @@ import java.util.List;
 import com.koreaIT.java.BAM.dto.Article;
 
 public class ArticleDao extends Dao {
-	public List<Article> articles;
+	private List<Article> articles;
 
 	public ArticleDao() {
 		articles = new ArrayList<>();
@@ -20,10 +20,10 @@ public class ArticleDao extends Dao {
 
 	public List<Article> getForPrintArticles(String searchKeyword) {
 		// if (searchKeyword.length() > 0)
-		//추후 query문으로 대체될것임
+		// 추후 query문으로 대체될것임
 		if (searchKeyword != null) {
 
-			//
+			System.out.println("검색어 : " + searchKeyword);
 
 			List<Article> forPrintArticles = new ArrayList<>();
 
@@ -38,5 +38,35 @@ public class ArticleDao extends Dao {
 		}
 		return articles;
 	}
+
+	public void remove(Article foundArticle) {
+		articles.remove(foundArticle);
+		
+	}
+
+	//
+	public int getArticleIndexById(int id) {
+		int i = 0;
+
+		for (Article article : articles) {
+			if (article.id == id) {
+				return i;
+			}
+			i++;
+		}
+		return -1;
+	}
+
+	//
+	public Article getArticleById(int id) {
+		int index = getArticleIndexById(id);
+
+		if (index != -1) {
+			return articles.get(index);
+		}
+		return null;
+	}
+
+	
 
 }
