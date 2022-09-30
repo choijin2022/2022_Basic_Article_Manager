@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 import com.koreaIT.java.BAM.container.Container;
 import com.koreaIT.java.BAM.dto.Article;
-import com.koreaIT.java.BAM.dto.Member;
 import com.koreaIT.java.BAM.util.Util;
 
 public class ArticleController extends Controller {
@@ -70,7 +69,7 @@ public class ArticleController extends Controller {
 		List<Article> forPrintArticles = Container.articleService.getForArticles(searchKeyword);
 
 		if (forPrintArticles.size() == 0) {
-			System.out.println("검색결과가 없습니다");
+			System.out.println("게시물이 없습니다");
 			return;
 		}
 
@@ -78,21 +77,16 @@ public class ArticleController extends Controller {
 		for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
 			Article article = forPrintArticles.get(i);
 
-			String writerName = null;
+			String writerName =Container.memberService.getWriterName(article.memberId);
 			// 
-			List<Member> members = Container.memberDao.members;
-
-			for (Member member : members) {
-				if (article.memberId == member.id) {
-					writerName = member.name;
-					break;
-				}
-			}
-
+			
+			
 			System.out.printf("%d	|	%s	|	%s	|	%s	|	%d\n", article.id, article.title, article.regDate,
 					writerName, article.viewCnt);
+			}
+
 		}
-	}
+	
 
 	private void showDetail() {
 		String[] cmdBits = cmd.split(" ");
